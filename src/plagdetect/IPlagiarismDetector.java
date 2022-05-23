@@ -14,7 +14,7 @@ import java.util.Map;
  * and is designed to process a batch of documents all at once,
  * with no obvious way to update the results with new documents.
  * 
- * @author jspacco
+ * @author Mohammed Maeez Lahori
  *
  */
 public interface IPlagiarismDetector
