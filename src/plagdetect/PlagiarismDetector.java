@@ -2,17 +2,19 @@ package plagdetect;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
 public class PlagiarismDetector implements IPlagiarismDetector {
 	public int n;
-	HashMap<String, Set<String>> pan = new HashMap<String, Set<String>>();
-	Map<String, Map<String , Integer>> map = new HashMap<>();
+	public HashMap<String, Set<String>> pan = new HashMap<String, Set<String>>();
+	public Map<String, Map<String , Integer>> map = new HashMap<>();
 	
 	public PlagiarismDetector(int n) {
 		// TODO implement this method
@@ -42,7 +44,9 @@ public class PlagiarismDetector implements IPlagiarismDetector {
 	@Override
 	public int getNumNgramsInFile(String filename) {
 		// TODO Auto-generated method stub
-		return pan.get(filename).size();
+		//System.out.println(this.pan);
+		
+		return this.pan.get(filename).size();
 	}
 
 	@Override
@@ -57,23 +61,27 @@ public class PlagiarismDetector implements IPlagiarismDetector {
 	public void readFile(File file) throws IOException {
 		// TODO Auto-generated method stub
 		// most of your work can happen in this method
-		String wor = " ";
-		Set<String> set = new HashSet<>();
+		String wor = "";
+		int t = n;
+		Set<String> set = new LinkedHashSet<>();
 		Scanner scan = new Scanner(file);
 		while(scan.hasNextLine()) {
 			String x = scan.nextLine();
 			String[] word = x.split(" ");
-			for(int j=0; j<word.length/n; j++) {
-				if(word.length-j*n<n)
-					break;
-				for (int i=0; i<n; i++) {
-					wor = " " + word[i+j*n];
+			for(int j=0; j < word.length-n+1; j++) {
+				wor = "";
+				for (int i=j; i<t; i++) {
+					wor = wor + " " + word[i];
 				}
-				wor.trim();
+				wor = wor.trim();
 				set.add(wor);
+				t++;
 			}
-			pan.put(file.getName(), set);
+			//System.out.println(file.getName());
+			//System.out.println((this.pan.get(file.getName())));
 		}
+		pan.put(file.getName(), set);
+		System.out.println(pan);
 		Map<String, Integer> m = new HashMap<>();
 		Set<String> k = pan.keySet();
 		k.remove(file.getName());
