@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class PlagiarismDetector implements IPlagiarismDetector {
 	public int n;
-	public HashMap<String, Set<String>> pan = new HashMap<String, Set<String>>();
+	public Map<String, Set<String>> pan = new HashMap<String, Set<String>>();
 	public Map<String, Map<String , Integer>> map = new HashMap<>();
 	
 	public PlagiarismDetector(int n) {
@@ -31,7 +31,6 @@ public class PlagiarismDetector implements IPlagiarismDetector {
 	@Override
 	public Collection<String> getFilenames() {
 		// TODO Auto-generated method stub
-		
 		return pan.keySet();
 	}
 
@@ -44,9 +43,8 @@ public class PlagiarismDetector implements IPlagiarismDetector {
 	@Override
 	public int getNumNgramsInFile(String filename) {
 		// TODO Auto-generated method stub
-		//System.out.println(this.pan);
+		return pan.get(filename).size();
 		
-		return this.pan.get(filename).size();
 	}
 
 	@Override
@@ -68,18 +66,17 @@ public class PlagiarismDetector implements IPlagiarismDetector {
 		while(scan.hasNextLine()) {
 			String x = scan.nextLine();
 			String[] word = x.split(" ");
-			for(int j=0; j < word.length-n+1; j++) {
+			for(int j=0; j <= word.length-n; j++) {
 				wor = "";
 				for (int i=j; i<t; i++) {
-					wor = wor + " " + word[i];
+					wor = wor +" "+word[i];
 				}
 				wor = wor.trim();
 				set.add(wor);
 				t++;
 			}
-			//System.out.println(file.getName());
-			//System.out.println((this.pan.get(file.getName())));
 		}
+		
 		pan.put(file.getName(), set);
 		System.out.println(pan);
 		Map<String, Integer> m = new HashMap<>();
@@ -90,7 +87,7 @@ public class PlagiarismDetector implements IPlagiarismDetector {
 		}
 		map.put(file.getName(), m);
 	}
-
+	
 	@Override
 	public int getNumNGramsInCommon(String file1, String file2) {
 		// TODO Auto-generated method stub
